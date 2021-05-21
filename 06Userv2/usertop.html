@@ -21,7 +21,13 @@
         function buttonUpdated() {
             var url = 'update.html'
             var userid = sessionStorage.getItem('userid')
-            location.href = 'update.html' + '?userid=' + userid; 
+            location.href = url + '?userid=' + userid; 
+        }
+
+        function tweetsIndex() {
+            var url = 'tweets.html'
+            var userid = sessionStorage.getItem('userid')
+            location.href = url + '?userid=' + userid;
         }
     </script>
 
@@ -31,7 +37,7 @@
     <h1>ユーザトップ</h1>
     <p id="welcome">ようこそ<span id="name"></span>さん</p>
     <hr>
+    <button onclick="tweetsIndex()">ツイート画面へ</a>
     <button onclick="buttonUpdated()">ユーザー情報変更</button>
 </body>
-
 </html>
