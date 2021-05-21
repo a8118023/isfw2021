@@ -14,20 +14,28 @@
             init();
         })
         function init() {
-            var name = sessionStorage.getItem('username');
+            var name = sessionStorage.getItem('name');
             document.getElementById('name').innerHTML = name;
         }
 
         function buttonUpdated() {
-            var url = 'update.html'
-            var userid = sessionStorage.getItem('userid')
+            var url = 'update.html';
+            var userid = sessionStorage.getItem('userid');
             location.href = url + '?userid=' + userid; 
         }
 
-        function tweetsIndex() {
-            var url = 'tweets.html'
-            var userid = sessionStorage.getItem('userid')
-            location.href = url + '?userid=' + userid;
+        function tweetIndex() {
+            var url = 'tweet.html';
+            var userid = sessionStorage.getItem('userid');
+            var name = sessionStorage.getItem('name');
+            sessionStorage.setItem('userid', userid);
+            sessionStorage.setItem('name', name);
+            location.href = url;
+        }
+
+        function set() {
+            var userid = sessionStorage.getItem('userid');
+            var name = sessionStorage.getItem('name');
         }
     </script>
 
@@ -37,7 +45,7 @@
     <h1>ユーザトップ</h1>
     <p id="welcome">ようこそ<span id="name"></span>さん</p>
     <hr>
-    <button onclick="tweetsIndex()">ツイート画面へ</a>
-    <button onclick="buttonUpdated()">ユーザー情報変更</button>
+    <a href="#" onclick="tweetIndex()">ツイート画面へ</a></br>
+    <a href="#" onclick="buttonUpdated()">ユーザー情報変更</a>
 </body>
 </html>
