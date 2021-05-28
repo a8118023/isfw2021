@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="../jquery.min.js"></script>
+    <script type="text/javascript" src="../settings.js"></script>
+    <script type="text/javascript" src="../osql.js"></script>
+    <script>
+        $(document).ready(function(){
+            init();
+        });
+
+        function init() {
+            var name = sessionStorage.getItem('name');
+            document.getElementById('name').innerHTML = name;
+            execSelect();
+        }
+
+        // ユーザー一覧生成
+        async function execSelect() {
+            var sql = 'select * from Users';
+            var objects = await osql.connect(sql);
+            var html = '';
+            html = html + '<table border="1">';
+            html = html + '<tr><th>ID</th><th>名前</th><th>フォロー</th></tr>'
+            for (var i = 0; i < objects.length; i++) {
+                html = html + '<tr>';
+                var object = objects[i];
+                html = html + '<td>' + object.id + '</td>';
+                html = html + '<td>' + object.name + '</td>';
+                var buttonHtml = await buttonFollow(object.id);
+                html = html + '<td>' + buttonHtml + '</td>';
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('result').innerHTML = html;
+        }
+
+        // ボタン生成
+        async function buttonFollow(userTo) {
+            var userFrom = sessionStorage.getItem('userid');
+            var sql = `select toid, fromid from Follows where fromid = "${userFrom}" and toid = "${userTo}";`;
+            var objects = await osql.connect(sql);
+
+            var html = "";
+            if(objects.length) {
+                html = `<button id="${userTo}" onclick="unFollow('${userTo}')" style="background-color: #3399FF;">フォロー中！</button>`;
+            } else {
+                html = `<button id="${userTo}" onclick="onFollow('${userTo}')" style="background-color: #FF99FF;">フォローする</button>`;
+            }
+            return html;
+        }
+
+        async function onFollow(userTo) {
+            var userFrom = sessionStorage.getItem('userid');
+            var sql = `insert into Follows values("${userFrom}", "${userTo}");`;
+            var objects = await osql.connect(sql);
+            document.getElementById(userTo).outerHTML = `<button id="${userTo}" onclick="unFollow('${userTo}')" style="background-color: #3399FF;">フォロー中！</button>`;
+        }
+        
+
+        async function unFollow(userTo) {
+            var userFrom = sessionStorage.getItem('userid');
+            var sql = `delete from Follows where fromid = "${userFrom}" and toid = "${userTo}";`;
+            var objects = await osql.connect(sql);
+            document.getElementById(userTo).outerHTML = `<button id="${userTo}" onclick="onFollow('${userTo}')" style="background-color: #FF99FF;">フォローする</button>`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Follow</h1>
+    <p>ようこそ<span id="name"></span>さん</p>
+    <p>フォローしたい人を選んでください</p>
+    <hr>
+    <p id="result">xxxx</p>
+</body>

@@ -33,10 +33,16 @@
             location.href = url;
         }
 
-        function set() {
+        function buttonFollow() {
+            var url = 'follow.html';
             var userid = sessionStorage.getItem('userid');
             var name = sessionStorage.getItem('name');
+            sessionStorage.setItem('userid', userid);
+            sessionStorage.setItem('name', name);
+            location.href = url;
         }
+
+
     </script>
 
 </head>
@@ -46,6 +52,7 @@
     <p id="welcome">ようこそ<span id="name"></span>さん</p>
     <hr>
     <a href="#" onclick="tweetIndex()">ツイート画面へ</a></br>
-    <a href="#" onclick="buttonUpdated()">ユーザー情報変更</a>
+    <a href="#" onclick="buttonUpdated()">ユーザー情報変更</a></br>
+    <a href="#" onclick="buttonFollow()">フォロー画面へ</a>
 </body>
 </html>
